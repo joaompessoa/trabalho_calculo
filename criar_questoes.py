@@ -12,7 +12,7 @@ def generate_questions(num_questions):
         
         # Partial Derivatives
         for _ in range(num_each):
-            a, b = random.randint(1, 5), random.randint(1, 5)
+            a, b = random.randint(1, 99), random.randint(1, 99)
             f = a*x**b + b*y**a
             question = f"Encontre a derivada parcial de f(x, y) = {f} em relação a x."
             answer = sp.diff(f, x)
@@ -20,7 +20,7 @@ def generate_questions(num_questions):
 
         # Optimization
         for _ in range(num_each):
-            a, b, c = random.randint(-5, 5), random.randint(-5, 5), random.randint(-5, 5)
+            a, b, c = random.randint(-50,50 ), random.randint(-50, 50), random.randint(-50, 50)
             f = -a*x**2 + b*x + c
             critical_points = sp.solve(sp.diff(f, x), x)
             critical_point = critical_points[0] if critical_points else None
@@ -31,9 +31,9 @@ def generate_questions(num_questions):
 
         # Double Integrals
         for _ in range(num_each + remainder):
-            a, b, c, d = random.randint(0, 5), random.randint(1, 5), random.randint(0, 5), random.randint(1, 5)
-            f = random.randint(1, 5)
-            question = f"Avalie a integral dupla de {f} sobre a região {a} <= x <= {a + 1} e {c} <= y <= {c + 1}."
+            a, b, c, d = random.randint(0, 99), random.randint(1, 99), random.randint(0, 99), random.randint(1, 99)
+            f = random.randint(1, 99)
+            question = f"Avalie a integral dupla de {f} sobre a região {a} <= x <= {a + random.randint(1,9)} e {c} <= y <= {c + random.randint(1,9)}."
             integral = sp.integrate(sp.integrate(f, (x, a, a + 1)), (y, c, c + 1))
             answer = integral
             questions.append({"question": question, "answer": answer})
