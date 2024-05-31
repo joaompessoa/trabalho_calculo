@@ -282,7 +282,7 @@ def check_win_condition():
 def check_lose_condition():
     if blocks[0].bottom >= height:
         feedback = "Você perdeu!"
-        end_game()
+        end_game(questions)
 
 def end_game(questions_used):
     global show_question, user_input, current_question, feedback, start_time
@@ -308,7 +308,6 @@ def reset_game():
     global blocks, feedback, current_question, correct_answers, incorrect_answers
     blocks = [pygame.Rect(origin[0] - block_width // 2, origin[1] - block_height // 2, block_width, block_height)]
     feedback = ""
-    #current_question = random.choice(questions)
     correct_answers = 0
     incorrect_answers = 0
 
