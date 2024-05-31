@@ -180,21 +180,21 @@ def draw_blocks(win):
         pygame.draw.rect(win, red, block)
 
 def display_question(win, question, user_input):
-    question_surface = question_font.render(question, True, black)
-    input_surface = question_font.render(user_input, True, blue)
+    question_surface = question_font.render(question, True, black,white)
+    input_surface = question_font.render(user_input, True, blue,white)
     win.blit(question_surface, (50, 50))
     win.blit(input_surface, (50, 100))
 
 def display_feedback(win, feedback):
-    feedback_surface = feedback_font.render(feedback, True, green if feedback == "Correto!" else red)
+    feedback_surface = feedback_font.render(feedback, True, green if feedback == "Correto!" else red,white)
     win.blit(feedback_surface, (50, 150))
 
 def display_timer(win, time_left):
-    timer_surface = feedback_font.render(f"Faltam: {time_left}s", True, black)
+    timer_surface = feedback_font.render(f"Faltam: {time_left}s", True, black,white)
     win.blit(timer_surface, (50, 200))
 
 def display_scoreboard(win):
-    score_surface = font.render(f"Certas: {correct_answers}  Erradas: {incorrect_answers}", True, black)
+    score_surface = font.render(f"Certas: {correct_answers}  Erradas: {incorrect_answers}", True, black,white)
     win.blit(score_surface, (width - 300, 20))
 
 def display_question_count_menu(win):
@@ -290,13 +290,13 @@ def end_game(questions_used):
     user_input = ""
     start_time = None
     # Result display in the main window
-    result_surface = font.render(f"Corretos: {correct_answers}  Errados: {incorrect_answers}", True, blue)
+    result_surface = font.render(f"Corretos: {correct_answers}  Errados: {incorrect_answers}", True, blue,white)
     win.blit(result_surface, (width // 2 - result_surface.get_width() // 2, height // 2 - 50))
 
     # Display used questions
     y_pos = height // 2 
     for question in questions_used:
-        question_surface = question_font.render(question["question"], True, black)
+        question_surface = question_font.render(question["question"], True, black,white)
         win.blit(question_surface, (50, y_pos))
         y_pos += 30
     pygame.display.flip()
