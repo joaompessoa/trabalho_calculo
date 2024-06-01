@@ -45,12 +45,12 @@ correct_answers = 0
 incorrect_answers = 0
 
 # Current question and input state
-# current_question = random.choice(questions)
 user_input = ""
 show_question = False
 feedback = ""
 time_limit = 30  # Default time limit
 start_time = None
+questions_asked = []
 
 # Main game loop
 def main():
@@ -59,6 +59,7 @@ def main():
     show_start_menu = True
     difficulty_selected = False
     game_started = False
+    end_game_menu = False
 
     while run:
         win.fill(white)
@@ -76,6 +77,9 @@ def main():
             game_started = True
             show_question = True
             start_time = time.time()
+        elif end_game_menu:
+            end_game(questions)
+            display_end_menu(win)
         else:
             draw_cartesian_plane(win)
             draw_blocks(win)
@@ -92,7 +96,7 @@ def main():
             else:
                 # Handle the case where no questions were generated
                 feedback = "Fim do Jogo"
-                end_game(questions)  # Call end_game with questions used
+                # end_game(questions)  # Call end_game with questions used
                 game_started = False  # Reset game after it ends
                 show_question = False
 
@@ -124,6 +128,13 @@ def main():
                         difficulty_selected = True
                     else:
                         feedback = "Seleção inválida! Pressione 1, 2, ou 3."
+                elif end_game_menu:
+                    if event.key == pygame.K_RETURN:
+                        reset_game()
+                        show_start_menu = True
+                        end_game_menu = False
+                    elif event.key == pygame.K_ESCAPE:
+                        run = False
                 else:
                     if event.key == pygame.K_SPACE and not show_question:
                         show_question = True
@@ -135,11 +146,12 @@ def main():
                     else:
                         user_input += event.unicode
 
-        if feedback in ["Você venceu!", "Você perdeu!","Fim do jogo!"]:
-            game_started = False
-        if show_question and start_time and time.time() - start_time > time_limit:
-            feedback = "Tempo esgotado! Incorreto."
-            handle_incorrect_answer()
+        if feedback in ["Você venceu!", "Você perdeu!", "Fim do jogo!"]:
+            # display_end_menu(win)
+            end_game(questions)
+            end_game_menu = True
+            
+           
 
         pygame.display.update()
 
@@ -180,21 +192,21 @@ def draw_blocks(win):
         pygame.draw.rect(win, red, block)
 
 def display_question(win, question, user_input):
-    question_surface = question_font.render(question, True, black,white)
-    input_surface = question_font.render(user_input, True, blue,white)
+    question_surface = question_font.render(question, True, black, white)
+    input_surface = question_font.render(user_input, True, blue, white)
     win.blit(question_surface, (50, 50))
     win.blit(input_surface, (50, 100))
 
 def display_feedback(win, feedback):
-    feedback_surface = feedback_font.render(feedback, True, green if feedback == "Correto!" else red,white)
+    feedback_surface = feedback_font.render(feedback, True, green if feedback == "Correto!" else red, white)
     win.blit(feedback_surface, (50, 150))
 
 def display_timer(win, time_left):
-    timer_surface = feedback_font.render(f"Faltam: {time_left}s", True, black,white)
+    timer_surface = feedback_font.render(f"Faltam: {time_left}s", True, black, white)
     win.blit(timer_surface, (50, 200))
 
 def display_scoreboard(win):
-    score_surface = font.render(f"Certas: {correct_answers}  Erradas: {incorrect_answers}", True, black,white)
+    score_surface = font.render(f"Certas: {correct_answers}  Erradas: {incorrect_answers}", True, black, white)
     win.blit(score_surface, (width - 300, 20))
 
 def display_question_count_menu(win):
@@ -232,7 +244,7 @@ def display_question_count_menu(win):
         pygame.display.flip()
 
 def check_answer():
-    global show_question, user_input, feedback, start_time, correct_answers, incorrect_answers, current_question
+    global show_question, user_input, feedback, start_time, correct_answers, incorrect_answers, current_question, questions
 
     if user_input.strip() == str(current_question["answer"]):
         feedback = "Correto!"
@@ -245,15 +257,18 @@ def check_answer():
 
     show_question = False
     user_input = ""
+    questions_asked.append(current_question)
 
-    # Get the next question if there are any left
     if questions:
         questions.remove(current_question)  # Remove the answered question
-        current_question = random.choice(questions) if questions else None 
+        if questions:  # Check if there are questions left
+            current_question = random.choice(questions)
+        else:
+            feedback = "Fim do jogo!"
+            end_game(questions_asked)
     else:
         current_question = None  # No more questions
-
-    global time_left
+        end_game(questions_asked)
     time_left = time_limit  # Reset the timer for the next question
 
 def add_block_above():
@@ -273,43 +288,64 @@ def handle_incorrect_answer():
         blocks.insert(0, new_block)
         feedback += " Novo bloco adicionado abaixo."
         check_lose_condition()
-
+    
 def check_win_condition():
-    if blocks[-1].top <= 0:
+    global feedback
+    # Check if topmost block is entirely above the screen
+    if blocks[-1].top + block_height <= 0:
         feedback = "Você venceu!"
-        end_game()
+        end_game(questions)
 
 def check_lose_condition():
-    if blocks[0].bottom >= height:
+    global feedback
+    # Check if bottommost block is entirely below the screen
+    if blocks[0].bottom - block_height >= height:
         feedback = "Você perdeu!"
         end_game(questions)
 
+
 def end_game(questions_used):
-    global show_question, user_input, current_question, feedback, start_time
+    global show_question, user_input, current_question, feedback, start_time, end_game_menu
     show_question = False
     user_input = ""
     start_time = None
-    # Result display in the main window
-    result_surface = font.render(f"Corretos: {correct_answers}  Errados: {incorrect_answers}", True, blue,white)
-    win.blit(result_surface, (width // 2 - result_surface.get_width() // 2, height // 2 - 50))
+    end_game_menu = True
 
-    # Display used questions
-    y_pos = height // 2 
-    for question in questions_used:
-        question_surface = question_font.render(question["question"], True, black,white)
+    # Result display in the main window
+    result_surface = font.render(f"Corretos: {correct_answers}  Errados: {incorrect_answers}", True, blue, white)
+    win.blit(result_surface, (width // 2 - result_surface.get_width() // 2, 50))  # Move to the top
+
+    # Display used questions and their correct answers
+    y_pos = 150  # Start lower down to give more space
+    for question in questions_asked:
+        question_surface = question_font.render(question["question"], True, black, white)
         win.blit(question_surface, (50, y_pos))
-        y_pos += 30
+
+        # Display the correct answer below with more spacing
+        answer_surface = question_font.render(f"Resposta: {question['answer']}", True, green, white)
+        win.blit(answer_surface, (50, y_pos + 50))  # More space below the question
+
+        y_pos += 120  # Increase the spacing between question-answer pairs
+
     pygame.display.flip()
-    print(feedback)  # Display the result in the console
-    pygame.time.wait(5000)  # Wait for 2 seconds to show the feedback
-    reset_game()
+    print(feedback) 
+
+
+def display_end_menu(win):
+    end_menu_surface = font.render("Deseja jogar novamente? Pressione Enter para continuar ou ESC para sair.", True, black)
+    win.blit(end_menu_surface, (width // 2 - end_menu_surface.get_width() // 2, height - 100))
 
 def reset_game():
-    global blocks, feedback, current_question, correct_answers, incorrect_answers
+    global blocks, feedback, current_question, correct_answers, incorrect_answers, questions, questions_asked, show_start_menu, end_game_menu
     blocks = [pygame.Rect(origin[0] - block_width // 2, origin[1] - block_height // 2, block_width, block_height)]
     feedback = ""
+    current_question = None
     correct_answers = 0
     incorrect_answers = 0
+    questions = []  # Reset the list of questions
+    questions_asked = []  # Reset the list of asked questions
+    show_start_menu = True
+    end_game_menu = False
 
 if __name__ == "__main__":
     main()
