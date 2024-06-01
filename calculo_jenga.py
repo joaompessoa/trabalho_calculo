@@ -133,6 +133,7 @@ def main():
                         reset_game()
                         show_start_menu = True
                         end_game_menu = False
+                        difficulty_selected = False
                     elif event.key == pygame.K_ESCAPE:
                         run = False
                 else:
@@ -147,8 +148,6 @@ def main():
                         user_input += event.unicode
 
         if feedback in ["Você venceu!", "Você perdeu!", "Fim do jogo!"]:
-            # display_end_menu(win)
-            end_game(questions)
             end_game_menu = True
             
            
