@@ -1,4 +1,9 @@
 # Documentação do Projeto: Calculus Jenga
+
+## Desenvolvido por:
+* Joao Matheus Severino
+* Rodrigo Franco
+* Enzo Martins
 ###  Objetivo
 O projeto "Calculus Jenga" tem como objetivo principal reforçar os conceitos de cálculo multivariável de forma interativa e divertida. Utilizando a metáfora do jogo Jenga, os alunos são desafiados a responder perguntas sobre derivadas parciais, pontos máximos e mínimos, e integral dupla. A cada resposta correta, um bloco é adicionado à torre Jenga virtual, e a cada erro, um bloco é removido. O jogo termina quando a torre chega ao fim, quando ela chega ao topo ou quando todas as perguntas são respondidas.
 
