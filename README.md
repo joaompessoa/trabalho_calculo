@@ -2,15 +2,18 @@
 ###  Objetivo
 O projeto "Calculus Jenga" tem como objetivo principal reforçar os conceitos de cálculo multivariável de forma interativa e divertida. Utilizando a metáfora do jogo Jenga, os alunos são desafiados a responder perguntas sobre derivadas parciais, pontos máximos e mínimos, e integral dupla. A cada resposta correta, um bloco é adicionado à torre Jenga virtual, e a cada erro, um bloco é removido. O jogo termina quando a torre chega ao fim, quando ela chega ao topo ou quando todas as perguntas são respondidas.
 
-Implementação
+## Implementação
 O jogo foi desenvolvido utilizando a linguagem Python e a biblioteca Pygame, escolhidas por sua facilidade de uso, compatibilidade e recursos gráficos. O projeto segue a abordagem de implementação em código, criando um "serious game" que combina elementos de entretenimento com aprendizado.
 
-Tema
+## Tema
 O tema central do jogo gira em torno dos seguintes conceitos de cálculo multivariável:
 
-Derivadas Parciais: O jogo apresenta questões que exigem o cálculo de derivadas parciais de funções de múltiplas variáveis.
-Cálculo de Ponto Máximo e Mínimo: Os jogadores precisam identificar pontos críticos e determinar se são máximos ou mínimos
-Integral Dupla: O jogo inclui questões relacionados ao cálculo de integrais duplas sobre regiões específicas.
+#### Derivadas Parciais: 
+O jogo apresenta questões que exigem o cálculo de derivadas parciais de funções de múltiplas variáveis.
+#### Cálculo de Ponto Máximo e Mínimo: 
+Os jogadores precisam identificar pontos críticos e determinar se são máximos ou mínimos
+#### Integral Dupla: 
+O jogo inclui questões relacionados ao cálculo de integrais duplas sobre regiões específicas.
 
 ## Concepção e Design
 O Calculus Jenga foi projetado para estudantes de cálculo que buscam encontrar questões para se desafiar, praticar e consolidar seus conhecimentos.
